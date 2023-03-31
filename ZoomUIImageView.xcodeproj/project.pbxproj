@@ -310,6 +310,7 @@
 				DEVELOPMENT_TEAM = RG9DD7MR44;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZoomUIImageView/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Privacy - Camera Usage Description";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -338,6 +339,7 @@
 				DEVELOPMENT_TEAM = RG9DD7MR44;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZoomUIImageView/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Privacy - Camera Usage Description";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
