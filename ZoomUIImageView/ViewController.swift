@@ -9,105 +9,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    
-    @IBOutlet weak var imageView: UIImageView!
-    
-    var indexImage : Int = -1
-    @IBOutlet weak var lblTotalImage: UILabel!
-    
-    @IBOutlet var btnsChangeImage: [UIButton]!
-    
-    private var dataSourceImages : [UIImage] = [UIImage]()
-    
-    
-    @IBAction func actionTakePhoto(_ sender: UIButton) {
-        
-        let ac = UIAlertController(title: "Toma O Elige Una Foto", message: "Agrega una foto a la coleccion de zoom", preferredStyle: .actionSheet)
-        
-        ac.addAction(UIAlertAction(title: "Toma Foto", style: .default, handler: { _ in self.showCamera() }))
-        
-        ac.addAction(UIAlertAction(title: "Abrir Galeria", style: .default, handler: { _ in self.showGaleria() }))
-        
-        ac.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
-        
-        self.present(ac, animated: true)
-        
-    }
-    
-    private func showCamera() -> Void {
-        self.selectSourceTypeiImagePicker(.camera)
-    }
-    
-    private func showGaleria() -> Void {
-        self.selectSourceTypeiImagePicker(.photoLibrary)
-    }
-    
-    private func selectSourceTypeiImagePicker(_ st : UIImagePickerController.SourceType ){
-        if UIImagePickerController.isSourceTypeAvailable(st) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = st;
-            imagePicker.allowsEditing = true
-            self.present(imagePicker, animated: true)
-        }
-    }
-    
-    @IBAction func actionChangeImage(_ sender: UIButton) {
-        
-        if sender.tag == 0 {
-            if self.dataSourceImages.count >= 2 {
-                
-                if self.btnsChangeImage[1].isHidden {
-                    self.btnsChangeImage[1].isHidden = false
-                }
-                
-                self.indexImage = self.indexImage == 0 ? 0 : self.indexImage - 1
-                if self.indexImage == 0 {
-                    self.btnsChangeImage[0].isHidden = true
-                }
-                self.lblTotalImage.text = "\(self.indexImage + 1)/\(self.dataSourceImages.count)"
-                UIView.animate(withDuration: 0.2) {
-                    self.imageView.alpha = 0
-                } completion: { Bool in
-                    UIView.animate(withDuration: 0.2) {
-                        self.imageView.image = self.dataSourceImages[self.indexImage]
-                        self.imageView.alpha = 1
-                    }
-                }
-                
-            }
-        } else {
-            if self.dataSourceImages.count >= 2 {
-                
-                if self.btnsChangeImage[0].isHidden {
-                    self.btnsChangeImage[0].isHidden = false
-                }
-                
-                self.indexImage = self.indexImage < self.dataSourceImages.count - 1 ? self.indexImage + 1 : self.indexImage
-                if self.indexImage == self.dataSourceImages.count - 1 {
-                    self.btnsChangeImage[1].isHidden = true
-                }
-                self.lblTotalImage.text = "\(self.indexImage + 1)/\(self.dataSourceImages.count)"
-                UIView.animate(withDuration: 0.2) {
-                    self.imageView.alpha = 0
-                } completion: { Bool in
-                    UIView.animate(withDuration: 0.2) {
-                        self.imageView.image = self.dataSourceImages[self.indexImage]
-                        self.imageView.alpha = 1
-                    }
-                }
-                
-            }
-        }
-        
-    }
-    override func viewDidLoad() {
+    // MARK: - Override Func
+     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.scrollView.delegate = self
-        
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTapGestureRecognized(_:)))
         tapGesture.numberOfTapsRequired = 2
         scrollView.addGestureRecognizer(tapGesture)
@@ -123,8 +30,152 @@ class ViewController: UIViewController {
         self.btnsChangeImage.forEach{$0.isHidden = true}
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+    }
     
-    @objc func screenEdgePanGestureRecognizerRight(_ sender: UITapGestureRecognizer) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+    }
+    
+    
+    // MARK: - IBOutlet
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var lblTotalImage: UILabel!
+    @IBOutlet var btnsChangeImage: [UIButton]!
+
+    
+    // MARK: - Public let / var
+    
+    // MARK: - Private let / var
+    private var dataSourceImages : [UIImage] = [UIImage]()
+    private var indexImage : Int = -1
+
+    // MARK: - IBAction
+    @IBAction func actionTakePhoto(_ sender: UIButton) {
+        self.showAlerActionSheet()
+    }
+
+     @IBAction func actionChangeImage(_ sender: UIButton) {
+        
+        if sender.tag == 0 {
+           self.showNextImage()
+        } else {
+            self.showPreviousImage()
+        }
+        
+    }
+
+}
+
+
+
+// MARK: - Public Func
+extension ViewController {
+    
+}
+
+// MARK: - Private Func
+extension ViewController {
+    
+
+
+     private func showAlerActionSheet(){
+        let ac = UIAlertController(title: "Toma O Elige Una Foto", message: "Agrega una foto a la coleccion de zoom", preferredStyle: .actionSheet)
+        
+        ac.addAction(UIAlertAction(title: "Toma Foto", style: .default, handler: { _ in self.showCamera() }))
+        
+        ac.addAction(UIAlertAction(title: "Abrir Galeria", style: .default, handler: { _ in self.showGaleria() }))
+        
+        ac.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+        
+        self.present(ac, animated: true)
+    }
+
+     private func showCamera() -> Void {
+        self.selectSourceTypeiImagePicker(.camera)
+    }
+
+     private func showGaleria() -> Void {
+        self.selectSourceTypeiImagePicker(.photoLibrary)
+    }
+
+    private func showPreviousImage(){
+         if self.dataSourceImages.count >= 2 {
+                
+                self.hiddenButton(by: 1)
+                
+                self.indexImage = self.indexImage == 0 ? 0 : self.indexImage - 1
+               
+                self.animationChangeImage(isNext: true)
+            }
+    }
+
+    private func showNextImage(){
+        if self.dataSourceImages.count >= 2 {
+                
+                self.hiddenButton(by: 1)
+
+                self.indexImage = self.indexImage < self.dataSourceImages.count - 1 ? self.indexImage + 1 : self.indexImage
+                
+                self.animationChangeImage()
+            }
+    }
+
+    private func hiddenButton(by tag : Int){
+         if self.btnsChangeImage[tag].isHidden {
+                    self.btnsChangeImage[tag].isHidden = false
+            }
+    }
+
+    private func animationChangeImage(isNext : Bool = false){
+
+        if isNext {
+             if self.indexImage == self.dataSourceImages.count - 1 {
+                    self.btnsChangeImage[1].isHidden = true
+                }
+        } else {
+             if self.indexImage == 0 {
+                    self.btnsChangeImage[0].isHidden = true
+                }
+        }
+
+        self.lblTotalImage.text = "\(self.indexImage + 1)/\(self.dataSourceImages.count)"
+
+                UIView.animate(withDuration: 0.2) {
+                    self.imageView.alpha = 0
+                } completion: { Bool in
+                    UIView.animate(withDuration: 0.2) {
+                        self.imageView.image = self.dataSourceImages[self.indexImage]
+                        self.imageView.alpha = 1
+                    }
+                }
+    }
+
+     private func selectSourceTypeiImagePicker(_ st : UIImagePickerController.SourceType ){
+        if UIImagePickerController.isSourceTypeAvailable(st) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = st;
+            imagePicker.allowsEditing = true
+            self.present(imagePicker, animated: true)
+        }
+    }
+
+     @objc func screenEdgePanGestureRecognizerRight(_ sender: UITapGestureRecognizer) {
         print("Right")
     }
     
@@ -150,12 +201,14 @@ class ViewController: UIViewController {
     
 }
 
+// MARK: - Services
 extension ViewController : UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
 }
 
+// MARK: - Services
 extension ViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
